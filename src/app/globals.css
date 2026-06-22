@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --color-charcoal: #2d2d2d;
+  --color-gold-300: #d4af37;
+  --color-gold-400: #c9a227;
+  --color-gold-500: #b8960b;
+  --color-cream: #f8f6f3;
+  --color-rose-gold: #b76e79;
+  --color-yellow-gold: #b8860b;
+  --color-white-gold: #d0d0d0;
+  --color-platinum: #e5e4e2;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@import "tailwindcss";
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  html::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  html::-webkit-scrollbar-thumb {
+    background: #b8860b;
+    border-radius: 3px;
+  }
+
+  html::-webkit-scrollbar-thumb:hover {
+    background: #92670a;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: #2d2d2d;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  /* Selection */
+  ::selection {
+    background-color: #b8860b20;
+    color: #b8860b;
+  }
+
+  /* Gold shimmer animation */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  .gold-shimmer {
+    background: linear-gradient(90deg, #b8860b 0%, #fcd34d 50%, #b8860b 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* Luxury underline */
+  .luxury-underline {
+    position: relative;
+  }
+
+  .luxury-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #b8860b, transparent);
+  }
+
+  /* Diamond shape clip paths */
+  .clip-diamond {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+
+  /* Ring card hover */
+  .ring-card {
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .ring-card:hover {
+    transform: translateY(-8px);
+  }
+
+  /* Backdrop blur utility */
+  .backdrop-luxury {
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #b8860b;
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #92670a;
+  }
+}
