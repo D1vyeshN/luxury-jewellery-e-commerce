@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import toast from 'react-hot-toast'
 
 interface AuthFormProps {
   type: 'login' | 'register'
