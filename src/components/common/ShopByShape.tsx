@@ -133,7 +133,7 @@ export const ShopByShape: React.FC = () => {
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {DIAMOND_SHAPES.map((shape, index) => (
-            <Link key={shape.id} href="/shop">
+            <Link key={shape.id} href={`/shop?shape=${shape.id}`}>
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

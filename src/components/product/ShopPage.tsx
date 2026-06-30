@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Filter, X, ChevronDown } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { ProductCard } from './ProductCard';
 import { FEATURED_PRODUCTS, METALS, DIAMOND_SHAPES, PRICE_RANGES } from '../../constants';
 import type { Product, MetalType, DiamondShape } from '../../types';
@@ -20,6 +21,7 @@ const SORT_OPTIONS = [
 ];
 
 export const ShopPage: React.FC<ShopPageProps> = ({ onView }) => {
+  const searchParams = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
   const [selectedMetals, setSelectedMetals] = useState<MetalType[]>([]);
   const [selectedShapes, setSelectedShapes] = useState<DiamondShape[]>([]);
@@ -27,6 +29,32 @@ export const ShopPage: React.FC<ShopPageProps> = ({ onView }) => {
   const [sortBy, setSortBy] = useState('featured');
   const [onlyNew, setOnlyNew] = useState(false);
   const [onlyBestseller, setOnlyBestseller] = useState(false);
+
+  useEffect(() => {
+    const shapeParam = searchParams.get('shape');
+    const metalParam = searchParams.get('metal');
+    const categoryParam = searchParams.get('category');
+
+    if (shapeParam && DIAMOND_SHAPES.some(s => s.id === shapeParam)) {
+      setSelectedShapes([shapeParam as DiamondShape]);
+      setShowFilters(true);
+    }
+
+    if (metalParam && METALS.some(m => m.id === metalParam)) {
+      setSelectedMetals([metalParam as MetalType]);
+      setShowFilters(true);
+    }
+
+    if (categoryParam === 'new') {
+      setOnlyNew(true);
+      setShowFilters(true);
+    }
+
+    if (categoryParam === 'bestseller') {
+      setOnlyBestseller(true);
+      setShowFilters(true);
+    }
+  }, [searchParams]);
 
   const toggleMetal = (m: MetalType) => setSelectedMetals(p => p.includes(m) ? p.filter(x => x !== m) : [...p, m]);
   const toggleShape = (s: DiamondShape) => setSelectedShapes(p => p.includes(s) ? p.filter(x => x !== s) : [...p, s]);

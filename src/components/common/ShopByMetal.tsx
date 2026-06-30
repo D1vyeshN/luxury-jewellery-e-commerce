@@ -52,7 +52,7 @@ export const ShopByMetal: React.FC = () => {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {METALS.map((metal, i) => (
-            <Link key={metal.id} href="/shop">
+            <Link key={metal.id} href={`/shop?metal=${metal.id}`}>
               <motion.button
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}

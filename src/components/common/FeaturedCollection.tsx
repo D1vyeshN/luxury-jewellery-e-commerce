@@ -92,7 +92,7 @@ export const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ onView }
           viewport={{ once: true }}
           className="flex justify-center mt-14"
         >
-          <Link href="/shop">
+          <Link href={activeTab === 'all' ? '/shop' : `/shop?category=${activeTab}`}>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
