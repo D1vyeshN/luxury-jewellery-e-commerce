@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, ShoppingBag, LogOut, Settings } from 'lucide-react'
 import { PersonalDetailsForm } from './PersonalDetailsForm'
@@ -8,6 +8,8 @@ import { OrderHistory } from './OrderHistory'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import toast from 'react-hot-toast'
 import Link from 'next/link'
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch'
+import { selectUser, logoutAsync, updateUserAsync } from '../../store/userSlice'
 
 interface UserProfile {
   name: string
@@ -30,12 +32,14 @@ interface Order {
 type Tab = 'personal' | 'orders'
 
 export const ProfilePage = () => {
+  const dispatch = useAppDispatch()
+  const user = useAppSelector(selectUser)
   const [activeTab, setActiveTab] = useState<Tab>('personal')
-  
+
   const [profile, setProfile] = useLocalStorage<UserProfile>('user-profile', {
-    name: '',
-    email: '',
-    phone: '',
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
     address: '',
     city: '',
     country: '',
@@ -59,16 +63,34 @@ export const ProfilePage = () => {
     },
   ])
 
-  const handleProfileSave = (updatedProfile: UserProfile) => {
+  const handleProfileSave = async (updatedProfile: UserProfile) => {
     setProfile(updatedProfile)
+    // Update Redux user state and localStorage
+    dispatch(updateUserAsync({
+      name: updatedProfile.name,
+      email: updatedProfile.email,
+      phone: updatedProfile.phone,
+    }) as any)
   }
 
   const handleLogout = () => {
     localStorage.removeItem('user-profile')
     localStorage.removeItem('user-orders')
+    dispatch(logoutAsync() as any)
     toast.success('Logged out successfully')
-    window.location.href = '/'
   }
+
+  // Sync profile with Redux user state
+  useEffect(() => {
+    if (user) {
+      setProfile(prev => ({
+        ...prev,
+        name: user.name || prev.name,
+        email: user.email || prev.email,
+        phone: user.phone || prev.phone,
+      }))
+    }
+  }, [user, setProfile])
 
   const TABS = [
     { id: 'personal' as Tab, label: 'Personal Details', icon: User },
@@ -139,12 +161,12 @@ export const ProfilePage = () => {
 
               {/* Actions */}
               <div className="pt-6 border-t border-gray-100 space-y-2">
-                <Link href="/settings">
+                {/* <Link href="/settings">
                   <button className="w-full flex items-center gap-3 px-4 py-3 text-sm font-sans text-gray-600 hover:bg-cream hover:text-charcoal transition-all">
                     <Settings size={16} />
                     Settings
                   </button>
-                </Link>
+                </Link> */}
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-3 px-4 py-3 text-sm font-sans text-rose-600 hover:bg-rose-50 transition-all"

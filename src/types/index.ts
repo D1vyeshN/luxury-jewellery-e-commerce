@@ -129,15 +129,14 @@ export interface RingSetting {
 
 export interface User {
   id: string;
+  name: string;
   email: string;
-  firstName: string;
-  lastName: string;
   phone?: string;
   avatar?: string;
-  addresses: Address[];
-  orders: Order[];
-  wishlistIds: string[];
-  createdAt: string;
+  addresses?: Address[];
+  orders?: Order[];
+  wishlistIds?: string[];
+  createdAt?: string;
 }
 
 export interface Address {

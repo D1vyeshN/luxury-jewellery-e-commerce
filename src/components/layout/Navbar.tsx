@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { toggleCart, selectCartCount } from '../../store/cartSlice';
 import { selectWishlistItems } from '../../store/wishlistSlice';
+import { selectUser, selectIsAuthenticated, logoutAsync } from '../../store/userSlice';
 import { NAV_ITEMS } from '../../constants';
 
 interface NavbarProps {
@@ -18,6 +19,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchOpen }) => {
   const dispatch = useAppDispatch();
   const cartCount = useAppSelector(selectCartCount);
   const wishlistItems = useAppSelector(selectWishlistItems);
+  const user = useAppSelector(selectUser);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -39,6 +42,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchOpen }) => {
 
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => setActiveMenu(null), 150);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutAsync() as any);
   };
 
   const navTextColor = isScrolled ? 'text-charcoal' : (pathname === '/' ? 'text-white' : 'text-charcoal');
@@ -218,9 +225,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchOpen }) => {
                     </span>
                   )}
                 </Link>
-                <button className="hover:text-gold-500 transition-colors">
+                <Link
+                  href={isAuthenticated ? '/profile' : '/login'}
+                  className={`hover:text-gold-500 transition-colors ${pathname === '/profile' || pathname === '/login' || pathname === '/register' ? 'text-gold-500' : ''}`}
+                >
                   <User size={18} strokeWidth={1.5} />
-                </button>
+                </Link>
                 <button onClick={() => dispatch(toggleCart())} className="relative hover:text-gold-500 transition-colors">
                   <ShoppingBag size={18} strokeWidth={1.5} />
                   {cartCount > 0 && (

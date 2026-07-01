@@ -8,9 +8,10 @@ import Link from 'next/link'
 interface AuthFormProps {
   type: 'login' | 'register'
   onSubmit: (data: any) => void
+  isLoading?: boolean
 }
 
-export const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
+export const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, isLoading = false }) => {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
@@ -153,13 +154,20 @@ export const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: type === 'register' ? 0.6 : 0.6 }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: isLoading ? 1 : 1.02 }}
+          whileTap={{ scale: isLoading ? 1 : 0.98 }}
           type="submit"
-          className="w-full py-4 bg-charcoal text-white text-xs uppercase tracking-[0.2em] font-sans hover:bg-gold-500 transition-all duration-300 flex items-center justify-center gap-2 group"
+          disabled={isLoading}
+          className="w-full py-4 bg-charcoal text-white text-xs uppercase tracking-[0.2em] font-sans hover:bg-gold-500 transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-charcoal"
         >
-          {type === 'login' ? 'Sign In' : 'Create Account'}
-          <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          {isLoading ? (
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <>
+              {type === 'login' ? 'Sign In' : 'Create Account'}
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </>
+          )}
         </motion.button>
       </form>
 

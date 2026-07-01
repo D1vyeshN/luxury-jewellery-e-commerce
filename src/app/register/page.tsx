@@ -1,14 +1,35 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useDispatch, useSelector } from 'react-redux'
 import { AuthForm } from '../../components/auth/AuthForm'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
+import { registerAsync, clearError, selectIsLoading, selectError, selectIsAuthenticated } from '../../store/userSlice'
 
 export default function RegisterPage() {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const isLoading = useSelector(selectIsLoading)
+  const error = useSelector(selectError)
+  const isAuthenticated = useSelector(selectIsAuthenticated)
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/')
+    }
+  }, [isAuthenticated, router])
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error)
+      dispatch(clearError())
+    }
+  }, [error, dispatch])
+
   const handleSubmit = (data: any) => {
-    // TODO: Implement actual registration logic
-    console.log('Register data:', data)
-    toast.success('Account created successfully!')
+    dispatch(registerAsync({ name: data.name, email: data.email, password: data.password }) as any)
   }
 
   return (
@@ -44,7 +65,7 @@ export default function RegisterPage() {
 
         {/* Right Side - Form */}
         <div className="flex items-center justify-center">
-          <AuthForm type="register" onSubmit={handleSubmit} />
+          <AuthForm type="register" onSubmit={handleSubmit} isLoading={isLoading} />
         </div>
       </div>
     </div>
