@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { toggleCart, selectCartCount } from '../../store/cartSlice';
 import { selectWishlistItems } from '../../store/wishlistSlice';
-import { selectUser, selectIsAuthenticated, logoutAsync } from '../../store/userSlice';
+import { selectIsAuthenticated } from '../../store/userSlice';
 import { NAV_ITEMS } from '../../constants';
 
 interface NavbarProps {
@@ -19,7 +19,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchOpen }) => {
   const dispatch = useAppDispatch();
   const cartCount = useAppSelector(selectCartCount);
   const wishlistItems = useAppSelector(selectWishlistItems);
-  const user = useAppSelector(selectUser);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,9 +43,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchOpen }) => {
     timeoutRef.current = setTimeout(() => setActiveMenu(null), 150);
   };
 
-  const handleLogout = () => {
-    dispatch(logoutAsync() as any);
-  };
 
   const navTextColor = isScrolled ? 'text-charcoal' : (pathname === '/' ? 'text-white' : 'text-charcoal');
   const navBg = isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : (pathname === '/' ? 'bg-transparent' : 'bg-white');
