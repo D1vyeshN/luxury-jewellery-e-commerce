@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 import { Filter, X, ChevronDown } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { ProductCard } from './ProductCard';
-import { FEATURED_PRODUCTS, METALS, DIAMOND_SHAPES, PRICE_RANGES } from '../../constants';
-import type { Product, MetalType, DiamondShape } from '../../types';
+import { FEATURED_PRODUCTS, METALS, DIAMOND_SHAPES, PRICE_RANGES, CATEGORIES } from '../../constants';
+import type { Product, MetalType, DiamondShape, ProductCategory } from '../../types';
 
 interface ShopPageProps {
   onView: (product: Product) => void;
@@ -25,6 +25,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({ onView }) => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedMetals, setSelectedMetals] = useState<MetalType[]>([]);
   const [selectedShapes, setSelectedShapes] = useState<DiamondShape[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<ProductCategory[]>([]);
   const [priceRange, setPriceRange] = useState<{ min: number; max: number } | null>(null);
   const [sortBy, setSortBy] = useState('featured');
   const [onlyNew, setOnlyNew] = useState(false);
@@ -45,6 +46,11 @@ export const ShopPage: React.FC<ShopPageProps> = ({ onView }) => {
       setShowFilters(true);
     }
 
+    if (categoryParam && CATEGORIES.some(c => c.id === categoryParam)) {
+      setSelectedCategories([categoryParam as ProductCategory]);
+      setShowFilters(true);
+    }
+
     if (categoryParam === 'new') {
       setOnlyNew(true);
       setShowFilters(true);
@@ -58,8 +64,10 @@ export const ShopPage: React.FC<ShopPageProps> = ({ onView }) => {
 
   const toggleMetal = (m: MetalType) => setSelectedMetals(p => p.includes(m) ? p.filter(x => x !== m) : [...p, m]);
   const toggleShape = (s: DiamondShape) => setSelectedShapes(p => p.includes(s) ? p.filter(x => x !== s) : [...p, s]);
+  const toggleCategory = (c: ProductCategory) => setSelectedCategories(p => p.includes(c) ? p.filter(x => x !== c) : [...p, c]);
 
   const filtered = FEATURED_PRODUCTS
+    .filter(p => selectedCategories.length === 0 || selectedCategories.includes(p.category))
     .filter(p => selectedMetals.length === 0 || selectedMetals.includes(p.metal))
     .filter(p => selectedShapes.length === 0 || (p.diamondShape && selectedShapes.includes(p.diamondShape)))
     .filter(p => !priceRange || (p.price >= priceRange.min && p.price <= (priceRange.max === Infinity ? 999999 : priceRange.max)))
@@ -73,9 +81,10 @@ export const ShopPage: React.FC<ShopPageProps> = ({ onView }) => {
       return 0;
     });
 
-  const activeFilterCount = selectedMetals.length + selectedShapes.length + (priceRange ? 1 : 0) + (onlyNew ? 1 : 0) + (onlyBestseller ? 1 : 0);
+  const activeFilterCount = selectedCategories.length + selectedMetals.length + selectedShapes.length + (priceRange ? 1 : 0) + (onlyNew ? 1 : 0) + (onlyBestseller ? 1 : 0);
 
   const resetFilters = () => {
+    setSelectedCategories([]);
     setSelectedMetals([]);
     setSelectedShapes([]);
     setPriceRange(null);
@@ -122,6 +131,12 @@ export const ShopPage: React.FC<ShopPageProps> = ({ onView }) => {
 
             {/* Active filter chips */}
             <div className="flex flex-wrap gap-2">
+              {selectedCategories.map(c => (
+                <span key={c} className="flex items-center gap-1.5 text-[10px] uppercase tracking-wide font-sans bg-charcoal text-white px-3 py-1">
+                  {CATEGORIES.find(x => x.id === c)?.label}
+                  <button onClick={() => toggleCategory(c)}><X size={10} /></button>
+                </span>
+              ))}
               {selectedMetals.map(m => (
                 <span key={m} className="flex items-center gap-1.5 text-[10px] uppercase tracking-wide font-sans bg-charcoal text-white px-3 py-1">
                   {METALS.find(x => x.id === m)?.label}
@@ -185,6 +200,24 @@ export const ShopPage: React.FC<ShopPageProps> = ({ onView }) => {
                     <input type="checkbox" checked={onlyBestseller} onChange={e => setOnlyBestseller(e.target.checked)} className="accent-gold-500" />
                     <span className="text-sm font-sans text-charcoal">Bestsellers</span>
                   </label>
+                </div>
+              </div>
+
+              {/* Categories */}
+              <div>
+                <h3 className="text-[10px] uppercase tracking-widest text-gray-400 font-sans mb-3">Categories</h3>
+                <div className="space-y-2">
+                  {CATEGORIES.map((c) => (
+                    <label key={c.id} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(c.id as ProductCategory)}
+                        onChange={() => toggleCategory(c.id as ProductCategory)}
+                        className="accent-gold-500"
+                      />
+                      <span className="text-sm font-sans text-charcoal">{c.label}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 

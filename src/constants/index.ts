@@ -5,37 +5,37 @@ import type { Product, Diamond, NavItem, RingSetting } from '../types';
 export const NAV_ITEMS: NavItem[] = [
   {
     label: 'Engagement Rings',
-    href: '/engagement-rings',
+    href: '/shop?category=engagement-rings',
     children: [
-      { label: 'Shop All Rings', href: '/engagement-rings', description: 'Browse our full collection' },
-      { label: 'Round Cut', href: '/engagement-rings?shape=round', description: 'Classic brilliance' },
-      { label: 'Oval Cut', href: '/engagement-rings?shape=oval', description: 'Elongated elegance' },
-      { label: 'Pear Cut', href: '/engagement-rings?shape=pear', description: 'Tearful beauty' },
-      { label: 'Princess Cut', href: '/engagement-rings?shape=princess', description: 'Modern sophistication' },
-      { label: 'Cushion Cut', href: '/engagement-rings?shape=cushion', description: 'Vintage romance' },
-      { label: 'Emerald Cut', href: '/engagement-rings?shape=emerald', description: 'Art deco glamour' },
+      { label: 'Shop All Rings', href: '/shop?category=engagement-rings', description: 'Browse our full collection' },
+      { label: 'Round Cut', href: '/shop?category=engagement-rings&shape=round', description: 'Classic brilliance' },
+      { label: 'Oval Cut', href: '/shop?category=engagement-rings&shape=oval', description: 'Elongated elegance' },
+      { label: 'Pear Cut', href: '/shop?category=engagement-rings&shape=pear', description: 'Tearful beauty' },
+      { label: 'Princess Cut', href: '/shop?category=engagement-rings&shape=princess', description: 'Modern sophistication' },
+      { label: 'Cushion Cut', href: '/shop?category=engagement-rings&shape=cushion', description: 'Vintage romance' },
+      { label: 'Emerald Cut', href: '/shop?category=engagement-rings&shape=emerald', description: 'Art deco glamour' },
       { label: 'Design Your Own', href: '/ring-builder', description: 'Start with a setting' },
     ],
   },
   {
     label: 'Wedding Bands',
-    href: '/wedding-bands',
+    href: '/shop?category=wedding-bands',
     children: [
-      { label: 'Women\'s Bands', href: '/wedding-bands/womens', description: 'Elegant and timeless' },
-      { label: 'Men\'s Bands', href: '/wedding-bands/mens', description: 'Bold and refined' },
-      { label: 'Matching Sets', href: '/wedding-bands/sets', description: 'Perfect together' },
-      { label: 'Diamond Bands', href: '/wedding-bands/diamond', description: 'Sparkling brilliance' },
-      { label: 'Plain Bands', href: '/wedding-bands/plain', description: 'Pure simplicity' },
+      { label: 'Shop All Bands', href: '/shop?category=wedding-bands', description: 'Browse our full collection' },
+      { label: 'Women\'s Bands', href: '/shop?category=wedding-bands', description: 'Elegant and timeless' },
+      { label: 'Men\'s Bands', href: '/shop?category=wedding-bands', description: 'Bold and refined' },
+      { label: 'Diamond Bands', href: '/shop?category=wedding-bands', description: 'Sparkling brilliance' },
+      { label: 'Plain Bands', href: '/shop?category=wedding-bands', description: 'Pure simplicity' },
     ],
   },
   {
     label: 'Fine Jewellery',
-    href: '/fine-jewellery',
+    href: '/shop',
     children: [
-      { label: 'Necklaces & Pendants', href: '/fine-jewellery/necklaces', description: 'Statement pieces' },
-      { label: 'Earrings', href: '/fine-jewellery/earrings', description: 'From studs to drops' },
-      { label: 'Bracelets', href: '/fine-jewellery/bracelets', description: 'Wrist elegance' },
-      { label: 'Tennis Bracelets', href: '/fine-jewellery/tennis', description: 'Classic luxury' },
+      { label: 'Necklaces & Pendants', href: '/shop?category=necklaces', description: 'Statement pieces' },
+      { label: 'Earrings', href: '/shop?category=earrings', description: 'From studs to drops' },
+      { label: 'Bracelets', href: '/shop?category=bracelets', description: 'Wrist elegance' },
+      { label: 'Custom Design', href: '/shop?category=custom', description: 'Create your own' },
     ],
   },
   {
@@ -98,6 +98,17 @@ export const PRICE_RANGES = [
   { label: '$5,000 – $10,000', min: 5000, max: 10000 },
   { label: '$10,000 – $20,000', min: 10000, max: 20000 },
   { label: '$20,000+', min: 20000, max: Infinity },
+];
+
+// ─── Categories ───────────────────────────────────────────────────────────────
+
+export const CATEGORIES = [
+  { id: 'engagement-rings', label: 'Engagement Rings' },
+  { id: 'wedding-bands', label: 'Wedding Bands' },
+  { id: 'necklaces', label: 'Necklaces' },
+  { id: 'earrings', label: 'Earrings' },
+  { id: 'bracelets', label: 'Bracelets' },
+  { id: 'custom', label: 'Custom Design' },
 ];
 
 // ─── Mock Products ────────────────────────────────────────────────────────────
